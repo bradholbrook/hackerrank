@@ -1,0 +1,5 @@
+# The humans responsible for making this website.
+
+# Team
+
+    <Name> -- <Role> -- <Contact>
