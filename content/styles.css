@@ -1,0 +1,21 @@
+﻿body {
+    padding: 70px 20px 0px 20px;
+}
+
+/* Force ng-cloak to have no display to overcome more specific selectors by default. 
+    See also: http://stackoverflow.com/questions/11249768/angularjs-ng-cloak-ng-show-elements-blink/13276214#13276214 */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
+.cell {
+    background-color: #BABAFF;
+    border: 1px solid #000;
+    display: inline-block;
+}
+
+#grid {
+    display: table;
+    margin: 0 auto;
+    padding: 0;
+}

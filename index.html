@@ -1,21 +1,77 @@
-﻿<html>
+﻿<!DOCTYPE html>
+<!--[if lte IE 7]> <html class="no-js oldie ie7" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js oldie ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" ng-app="CardinalityApp">
+<!--<![endif]-->
 <head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <meta title="Cardinality, a game built with love for the Facebook Platform using Parse" />
+    <meta lang="en" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Cardinality, a game built with love for the Facebook Platform using Parse</title>
+
+    <!--<meta name="description" content="An open source Twitter clone built with Firebase">-->
+    <!-- <link href="img/favicon.png" rel="shortcut icon" />
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link href="css/global.css" rel="stylesheet" />-->
+
+    <link href="Content/normalize.css" rel="stylesheet" />
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="Content/styles.css" rel="stylesheet" />
+
     <script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>
+    <script src="Scripts/lib/modernizr-2.6.2.min.js"></script>
 </head>
-
 <body>
-    <script src="scripts/parse.js"></script>
-    <script src="scripts/login.js"></script>
+    <div ng-controller="AuthController" ng-cloak>
 
-    <div id="fb-root"></div>
-    <div>
-        <div id="status">
-            <button onclick="Login()">Click to Login using Facebook</button>
+        <!--<ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Explore</a></li>
+            <li><a href="#">Messages</a></li>
+            <li><a href="#">Groups</a></li>
+        </ul>-->
+
+        <div class="row" ng-hide="user">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <button class="btn btn-primary" ng-click="login()" ng-hide="user">
+                    <b>Sign in with Facebook</b>
+                </button>
+                <button class="btn btn-primary" ng-click="logout()" ng-show="user">
+                    <b>Sign Out</b>
+                </button>
+            </div>
+            <p ng-show="user">Welcome back, {{user.displayName}}</p>
         </div>
-        <div id="message">
-            Logs:<br />
+
+        <div ng-show="user">
+            <div ng-controller="CardinalityController">
+                <div ng-hide="playing">
+                    <div class="btn-group">
+                        <button type="button" ng-repeat="difficulty in difficulties"
+                                ng-click="changeDifficulty($index)"
+                                class="btn btn-primary" ng-class="{active: $index==selectedDifficulty}">
+                            {{difficulty}}
+                        </button>
+                    </div>
+                    <select ng-model="selectedSize" ng-options="size.size as size.description for size in sizes"></select>
+                    <button ng-click="initializeGame()">PLAY GAME PLS</button>
+                </div>
+                <div id="grid">
+                    <div ng-repeat="row in grid" class="grid-row">
+                        <div ng-repeat="cell in row" class="cell">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script data-main="Scripts/app/CardinalityApp" src="Scripts/lib/require.js"></script>
 </body>
 </html>
