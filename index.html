@@ -20,24 +20,17 @@
     <link href="Content/normalize.css" rel="stylesheet" />
     <link href="Content/bootstrap.css" rel="stylesheet" />
     <link href="Content/styles.css" rel="stylesheet" />
-
     <script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
     <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>
     <script src="Scripts/lib/modernizr-2.6.2.min.js"></script>
 </head>
+
 <body>
     <div ng-controller="AuthController" ng-cloak>
-
-        <!--<ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Explore</a></li>
-            <li><a href="#">Messages</a></li>
-            <li><a href="#">Groups</a></li>
-        </ul>-->
-
-        <div class="row" ng-hide="user">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+        <div class="row loginContainer">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <p ng-show="user">Welcome back, {{user.displayName}}</p>
                 <button class="btn btn-primary" ng-click="login()" ng-hide="user">
                     <b>Sign in with Facebook</b>
                 </button>
@@ -45,12 +38,13 @@
                     <b>Sign Out</b>
                 </button>
             </div>
-            <p ng-show="user">Welcome back, {{user.displayName}}</p>
         </div>
 
-        <div ng-show="user">
-            <div ng-controller="CardinalityController">
-                <div ng-hide="playing">
+        <!-- Game Controller-->
+        <div ng-controller="CardinalityController" ng-show="user" ng-cloak>
+            <!-- Difficulty & options before beginning to play -->
+            <div class="row" ng-hide="playing">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="btn-group">
                         <button type="button" ng-repeat="difficulty in difficulties"
                                 ng-click="changeDifficulty($index)"
@@ -59,18 +53,45 @@
                         </button>
                     </div>
                     <select ng-model="selectedSize" ng-options="size.size as size.description for size in sizes"></select>
-                    <button ng-click="initializeGame()">PLAY GAME PLS</button>
-                </div>
-                <div id="grid">
-                    <div ng-repeat="row in grid" class="grid-row">
-                        <div ng-repeat="cell in row" class="cell">
-                            &nbsp;
-                        </div>
-                    </div>
+                    <button ng-click="initializeGame()">Begin Game</button>
                 </div>
             </div>
-        </div>
-    </div>
+
+            <!-- playing the game - grid, restart, current turn, etc. -->
+            <div ng-show="playing">
+                <div class="row scoreContainer">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div id="grid">
+                            <div ng-repeat="row in grid" class="grid-row">
+                                <div ng-repeat="cell in row" class="cell {{'row-' + $parent.$index}} {{'column-' + $index}}" data-row="{{$parent.$index}}" data-column="{{$index}}">
+                                    &nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+                        <div>Your Score:</div>
+                        <div class="score" ng-class="{active: currentPlayer==1}">
+                            <div>{{player1Score}}</div>
+                        </div>
+
+                        <br />
+                        <button ng-click="restartGame()">Restart Game...</button>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+                        <div>Computer's Score:</div>
+                        <div class="score" ng-class="{active: currentPlayer==2}">{{player2Score}}</div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div> <!-- Game Controller -->
+
+    </div> <!-- Auth Controller -->
 
     <script data-main="Scripts/app/CardinalityApp" src="Scripts/lib/require.js"></script>
 </body>
