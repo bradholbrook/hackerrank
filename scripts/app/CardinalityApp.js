@@ -7,6 +7,7 @@
         services: 'app/services',
         controllers: 'app/controllers',
         directives: 'app/directives',
+        factories: 'app/factories',
         Q: 'lib/q',
         jquery: 'lib/jquery'
     },
@@ -20,7 +21,7 @@
 define('modernizr', [], Modernizr);
 
 require(['jquery', 'angular', 'modernizr', 'CardinalityModule', 'controllers/MainController'],
-    function (jquery, angular, modernizr, CardinalityModule) {
+    function (jquery, angular, modernizr, CardinalityModule, MainController) {
         'use strict';
         CardinalityModule.FIREPATH = 'https://hot.firebaseio.com';
 

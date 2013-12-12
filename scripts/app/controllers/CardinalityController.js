@@ -2,13 +2,18 @@
     function CardinalityController($scope, $timeout) {
 
         $scope.grid = [];
-        $scope.playing = false;
-        $scope.player1Score = 0;
-        $scope.player2Score = 0;
+        $scope.isPlaying = false;
+
+        $scope.players = [
+            { name: 'Eric', type: 'Human', score: 0 },
+            { name: 'Ada', type: 'Computer', score: 0 }
+        ]; // TODO: Refactor into GameSetupController
+
+        //$scope.player1Score = 0;
+        //$scope.player2Score = 0;
 
         // 1 or 2 for which player has the current turn.
         $scope.currentPlayer = 1;
-
         $scope.currentTurn = 1;
 
         $scope.sizes = [
@@ -17,31 +22,53 @@
             { size: 9, description: '9x9' },
         ];
 
-        $scope.difficulties = ['Medium', 'Hard'];
-        $scope.selectedDifficulty = 0;
+        $scope.selectedSize = $scope.sizes[0].size;
+
+        $scope.difficulties = ['Easy', 'Medium', 'Hard'];
+        $scope.selectedDifficulty = 1;
 
         $scope.changeDifficulty = function (newDiff) {
             $scope.selectedDifficulty = newDiff;
-        }
+        };
 
         $scope.restartGame = function () {
             $scope.player1Score = 0;
             $scope.player2Score = 0;
             $scope.currentPlayer = 1;
             $scope.currentTurn = 1;
-            $scope.playing = false;
+            $scope.isPlaying = false;
             $scope.grid = [];
-        }
+        };
+
+        $scope.runComputerTurn = function (difficulty) {
+            var cells = $('.cell:not(.player-1):not(.player-2)');
+
+            var rndIndex = ~~(Math.random() * cells.length);
+
+            var selectedCell = cells[rndIndex];
+
+            selectedCell.click();
+        };
 
         $scope.changePlayerTurn = function () {
-            if ($scope.currentPlayer == 1) {
-                $scope.currentPlayer = 2;
-                // TODO: Run CPU algorithm
-            } else {
-                // Human
+            $scope.currentTurn++;
+            $scope.currentPlayer = $scope.getOppositePlayer();
+
+            $scope.$apply();
+
+            if ($scope.player1Score + $scope.player2Score == $scope.grid[0].length * $scope.grid.length) {
+                if ($scope.player1Score > $scope.player2Score) {
+                    alert('Player 1 won');
+                } else {
+                    alert('The Computer Won');
+                }
             }
 
-            $scope.currentTurn++;
+            else {
+                if ($scope.currentPlayer === 2) {
+                    $scope.runComputerTurn($scope.difficulties[$scope.selectedDifficulty]);
+                }
+            }
         }
 
         $scope.getOppositePlayer = function () {
@@ -56,11 +83,9 @@
             $scope.player2Score = 0;
             $scope.currentPlayer = 1; // TODO: Randomize current player @ start
             $scope.currentTurn = 1;
-            $scope.playing = true;
+            $scope.isPlaying = true;
             updateGrid($scope.selectedSize, $scope.selectedSize);
-        }
-
-        $scope.selectedSize = $scope.sizes[0].size;
+        };
 
         function updateGrid(width, height) {
             $scope.grid = [];
@@ -74,6 +99,10 @@
         }
 
         window.onresize = makeGridResponsive;
+
+        function styleGrid() {
+            // todo...
+        }
 
         function makeGridResponsive() {
             var cells = $('.cell');
@@ -93,6 +122,16 @@
             });
 
             $('.cell').click(function (cell) {
+                // TODO: After the grid has been recreated or modified in any way,
+                // the html will reset from Angular, so we have to make sure any styling on it is preserved...
+                //$scope.grid[0][0] = "";
+                //$scope.grid[0][1] = "";
+                //$scope.grid[0][2] = "";
+                //$scope.grid[0][3] = "";
+                //$scope.grid[0][4] = "";
+
+                //console.log($scope.grid);
+
                 if (!$(cell.target).hasClass('player-1') && !$(cell.target).hasClass('player-2')) {
                     var row = $(cell.target).data('row');
                     var column = $(cell.target).data('column');
@@ -105,13 +144,14 @@
                         $(this).removeClass('player-' + $scope.getOppositePlayer());
                     });
 
-                    $scope.currentPlayer = $scope.getOppositePlayer();
-                    // Calculate new scores
-
                     $scope.player1Score = $('.player-1').length;
                     $scope.player2Score = $('.player-2').length;
                     $scope.$apply();
+
+                    $scope.changePlayerTurn();
                 }
+
+                //makeGridResponsive();
             });
 
             $('.cell').mouseenter(function (cell) {

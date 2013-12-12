@@ -40,25 +40,47 @@
             </div>
         </div>
 
-        <!-- Game Controller-->
-        <div ng-controller="CardinalityController" ng-show="user" ng-cloak>
-            <!-- Difficulty & options before beginning to play -->
+        <div ng-controller="GameSetupController">
             <div class="row" ng-hide="playing">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="playerSelectGrid">
+                        <div>
+                            <div class="playerSelectPanel">
+                                
+                            </div>
+                            <div class="playerSelectPanel"></div>
+                        </div>
+                        <div>
+                            <div class="playerSelectPanel"></div>
+                            <div class="playerSelectPanel"></div>
+                        </div>
+
+                    </div>
+                </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                    <div class="btn-group">
+
+                    Grid Size:
+                    <select class="form-control"
+                            ng-model="selectedGridSize" ng-options="gridSize.size as gridSize.description for gridSize in gridSizes"></select>
+
+                    <hr />
+                    <button type="button" class="btn btn-success"
+                            ng-click="initializeGame('Cardinality', selectedGridSize, selectedGridSize)">
+                        Begin Game
+                    </button>
+                </div>
+            </div>
+
+            <!--<div ng-controller="CardinalityController" ng-show="user" ng-cloak>
+                <div class="btn-group">
                         <button type="button" ng-repeat="difficulty in difficulties"
                                 ng-click="changeDifficulty($index)"
                                 class="btn btn-primary" ng-class="{active: $index==selectedDifficulty}">
                             {{difficulty}}
                         </button>
                     </div>
-                    <select ng-model="selectedSize" ng-options="size.size as size.description for size in sizes"></select>
-                    <button ng-click="initializeGame()">Begin Game</button>
-                </div>
-            </div>
-
-            <!-- playing the game - grid, restart, current turn, etc. -->
-            <div ng-show="playing">
+            </div>-->
+            <!--<div ng-show="playing">
                 <div class="row scoreContainer">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div id="grid">
@@ -77,7 +99,9 @@
                         </div>
 
                         <br />
+
                         <button ng-click="restartGame()">Restart Game...</button>
+                        <div>{{'Turn #: ' + currentTurn}}</div>
                     </div>
 
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
@@ -85,9 +109,7 @@
                         <div class="score" ng-class="{active: currentPlayer==2}">{{player2Score}}</div>
                     </div>
                 </div>
-
-
-            </div>
+            </div>-->
 
         </div> <!-- Game Controller -->
 

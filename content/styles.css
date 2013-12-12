@@ -78,3 +78,15 @@ body {
     .score.active {
         background-color: #ff8639;
     }
+
+.playerSelectGrid
+{
+    display:table;
+    margin: 0 auto;
+}
+.playerSelectPanel
+{
+    display:inline-block;
+    margin:6px;
+    background-color:orange;
+}
