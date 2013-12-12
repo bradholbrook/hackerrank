@@ -1,5 +1,4 @@
-*.sln
-*.csproj
-*AssemblyInfo.cs
-*.manifest
-HackerRank/Pairs/obj/
+HackerRank/HackerRank.sln
+HackerRank/Pairs/Pairs.csproj
+HackerRank/Pairs/Properties/AssemblyInfo.cs
+HackerRank/Pairs/obj/Debug/Pairs.csproj.FileListAbsolute.txt
