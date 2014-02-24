@@ -21,13 +21,27 @@ namespace Regex.FindHtmlTags
         static void FindTags(List<String> lines)
         {
             SortedSet<String> tagSet = new SortedSet<String>();
-            System.Text.RegularExpressions.Regex pattern = new System.Text.RegularExpressions.Regex(@"^<(\w+)>.*${1}");
+            //Find first occurence
+            System.Text.RegularExpressions.Regex first = new System.Text.RegularExpressions.Regex(@"<[ ]*\b(\w+)\b[^>]*>");
+            HashSet<String> possibles = new HashSet<string>();
+
             foreach (String line in lines)
             {
-                System.Text.RegularExpressions.MatchCollection matches = pattern.Matches(line);
-                foreach(System.Text.RegularExpressions.Match match in matches)
+                System.Text.RegularExpressions.MatchCollection matches = first.Matches(line);
+                foreach (System.Text.RegularExpressions.Match match in matches)
                 {
-                    tagSet.Add(match.Groups["1"].Value);
+                    for(int i = 1; i < match.Groups.Count; i +=2)
+                    {
+                        possibles.Add(match.Groups[i].Value);
+                    }
+                }
+                foreach (String possible in possibles)
+                {
+                    System.Text.RegularExpressions.Regex second = new System.Text.RegularExpressions.Regex(@"<[^<]*\b" + possible + @"\b[^<]*/[^<]*>|<[^<]*/[^<]*\b" + possible + @"\b[^<]*>");
+                    if(second.IsMatch(line))
+                    {
+                        tagSet.Add(possible);
+                    }
                 }
             }
             string writestring = "";
